@@ -1,61 +1,101 @@
 import React, { Component } from 'react';
 //import react in our code. 
-import { StyleSheet, View, Text,Button} from 'react-native';
-import { Camera ,} from 'react-native-camera';
+
+import { StyleSheet, Text, View, TouchableOpacity, Button, Image } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 export default class SecondPage extends Component {
-  
-  takePicture = () => {
-    const options = {};
-    this.camera.capture({ metadata: options })
-    .then((data) => console.log(data))
-    .catch(err => console.error(err));
- }
-  static navigationOptions = {
-    title: 'Second Page',
-    //Sets Header text of Status Bar
-    headerStyle: {
-      backgroundColor: '#f4511e',
-      //Sets Header color
-    },
-    headerTintColor: '#fff',
-    //Sets Header text color
-    headerTitleStyle: {
-      fontWeight: 'bold',
-      //Sets Header text style
-    },
+  constructor(props) {
+    super(props);
+    this.state = {
+      resourcePath: {},
+    };
+  }
+  selectFile = () => {
+    var options = {
+      title: 'Select Image',
+      customButtons: [
+        { 
+          name: 'customOptionKey', 
+          title: 'Choose file from Custom Option' 
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, res => {
+      console.log('Response = ', res);
+
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        alert(res.customButton);
+      } else {
+        let source = res;
+        this.setState({
+          resourcePath: source,
+        });
+      }
+    });
   };
+
+ 
+  
   render() {
     const { navigate } = this.props.navigation;
     return (
-      
       <View style={styles.container}>
-        <Camera
-               ref = {(cam) => {
-                  this.camera = cam;
-               }}
-               style = {styles.preview}
-               aspect = {Camera.constants.Aspect.fill}>
-            </Camera>
-            <Text style = {styles.capture} onPress = {this.takePicture}>CAPTURE</Text>
-      <Text>profile</Text>
+      <View style={styles.container}>
+        <Image
+          source={{
+            uri: 'data:image/jpeg;base64,' + this.state.resourcePath.data,
+          }}
+          style={{ width: 100, height: 100 }}
+        />
+        <Image
+          source={{ uri: this.state.resourcePath.uri }}
+          style={{ width: 200, height: 200 }}
+        />
+        <Text style={{ alignItems: 'center' }}>
+          {this.state.resourcePath.uri}
+        </Text>
+        <Text>profile</Text>
         <Button title='Logout' onPress={() =>navigate('ThirdPage')}/>
+        <TouchableOpacity onPress={this.selectFile} style={styles.button}  >
+            <Text style={styles.buttonText}>Select File</Text>
+        </TouchableOpacity>       
       </View>
+    </View>
+    
+     
+     
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    padding: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
- },
- capture: {
-    fontSize: 30,
-    color: 'red',
-    alignSelf: 'center',
- }
+  button: {
+    width: 250,
+    height: 60,
+    backgroundColor: '#3740ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    marginBottom:12    
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#fff'
+  }
 });
