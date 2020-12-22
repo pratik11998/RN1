@@ -1,125 +1,24 @@
-import FingerprintScanner from 'react-native-fingerprint-scanner';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Alert,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewPropTypes,
-  Platform,
-} from 'react-native';
-
-
-// - this example component supports both the
-//   legacy device-specific (Android < v23) and
-//   current (Android >= 23) biometric APIs
-// - your lib and implementation may not need both
-class BiometricPopup extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessageLegacy: undefined,
-      biometricLegacy: undefined
-    };
-
-    this.description = null;
-  }
-
-  componentDidMount() {
-    if (this.requiresLegacyAuthentication()) {
-      this.authLegacy();
-    } else {
-      this.authCurrent();
+import Fingerprint from 'react-native-fingerprint-android';
+import { ToastAndroid as Toast } from 'react-native';
+ 
+(async() => {
+    const hardware = await Fingerprint.isHardwareDetected();
+    const permission = await Fingerprint.hasPermission();
+    const enrolled = await Fingerprint.hasEnrolledFingerprints();
+ 
+    if (!hardware || !permission || !enrolled) {
+        let message = !enrolled ? 'No fingerprints registered.' : !hardware ? 'This device doesn\'t support fingerprint scanning.' : 'App has no permission.'
+        Toast.show(message, Toast.SHORT);
+        return;
     }
-  }
-
-  componentWillUnmount = () => {
-    FingerprintScanner.release();
-  }
-
-  requiresLegacyAuthentication() {
-    return Platform.Version < 23;
-  }
-
-  authCurrent() {
-    FingerprintScanner
-      .authenticate({ title: 'Log in with Biometrics' })
-      .then(() => {
-        this.props.onAuthenticate();
-      });
-  }
-
-  authLegacy() {
-    FingerprintScanner
-      .authenticate({ onAttempt: this.handleAuthenticationAttemptedLegacy })
-      .then(() => {
-        this.props.handlePopupDismissedLegacy();
-        Alert.alert('Fingerprint Authentication', 'Authenticated successfully');
-      })
-      .catch((error) => {
-        this.setState({ errorMessageLegacy: error.message, biometricLegacy: error.biometric });
-        
-      });
-  }
-
-  handleAuthenticationAttemptedLegacy = (error) => {
-    this.setState({ errorMessageLegacy: error.message });
-    
-  };
-
-  renderLegacy() {
-    const { errorMessageLegacy, biometricLegacy } = this.state;
-    const { style, handlePopupDismissedLegacy } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <View style={[styles.contentContainer, style]}>
-
-          <Image
-            style={styles.logo}
-           
-          />
-
-          <Text style={styles.heading}>
-            Biometric{'\n'}Authentication
-          </Text>
-          <Text
-            ref={(instance) => { this.description = instance; }}
-            style={styles.description(!!errorMessageLegacy)}>
-            {errorMessageLegacy || `Scan your ${biometricLegacy} on the\ndevice scanner to continue`}
-          </Text>
-
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={handlePopupDismissedLegacy}
-          >
-            <Text style={styles.buttonText}>
-              BACK TO MAIN
-            </Text>
-          </TouchableOpacity>
-
-        </View>
-      </View>
-    );
-  }
-
-
-  render = () => {
-    if (this.requiresLegacyAuthentication()) {
-      return this.renderLegacy();
+ 
+    try {
+        await Fingerprint.authenticate(warning => {
+            Toast.show(`Try again: ${warning.message}`, Toast.SHORT);
+        });
+    } catch(error) {
+        Toast.show(`Authentication aborted: ${error.message}`, Toast.SHORT);
     }
-
-    // current API UI provided by native BiometricPrompt
-    return null;
-  }
-}
-
-BiometricPopup.propTypes = {
-  onAuthenticate: PropTypes.func.isRequired,
-  handlePopupDismissedLegacy: PropTypes.func,
-  style: ViewPropTypes.style,
-};
-
-export default BiometricPopup;
+ 
+    Toast.show("Auth successful!", Toast.SHORT);
+})();

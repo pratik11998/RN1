@@ -10,6 +10,8 @@ target 'fingerscanner' do
 
   pod 'react-native-fingerprint-scanner', :path => '../node_modules/react-native-fingerprint-scanner'
 
+  pod 'react-native-simple-toast', :path => '../node_modules/react-native-simple-toast'
+
   target 'fingerscannerTests' do
     inherit! :complete
     # Pods for testing

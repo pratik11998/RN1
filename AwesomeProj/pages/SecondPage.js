@@ -1,101 +1,84 @@
-import React, { Component } from 'react';
-//import react in our code. 
-
-import { StyleSheet, Text, View, TouchableOpacity, Button, Image } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
-export default class SecondPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      resourcePath: {},
-    };
-  }
-  selectFile = () => {
-    var options = {
-      title: 'Select Image',
-      customButtons: [
-        { 
-          name: 'customOptionKey', 
-          title: 'Choose file from Custom Option' 
-        },
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.showImagePicker(options, res => {
-      console.log('Response = ', res);
-
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else if (res.customButton) {
-        console.log('User tapped custom button: ', res.customButton);
-        alert(res.customButton);
-      } else {
-        let source = res;
-        this.setState({
-          resourcePath: source,
-        });
-      }
-    });
-  };
-
- 
+import React, { Component } from 'react';  
+import { View, Text, StyleSheet, Button } from 'react-native';  
+import Icon from 'react-native-vector-icons/Ionicons';  
+import FirstPage1 from './FirstPage.js';
+import SecondPage1 from './SecondPage.js';
   
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <View style={styles.container}>
-      <View style={styles.container}>
-        <Image
-          source={{
-            uri: 'data:image/jpeg;base64,' + this.state.resourcePath.data,
-          }}
-          style={{ width: 100, height: 100 }}
-        />
-        <Image
-          source={{ uri: this.state.resourcePath.uri }}
-          style={{ width: 200, height: 200 }}
-        />
-        <Text style={{ alignItems: 'center' }}>
-          {this.state.resourcePath.uri}
-        </Text>
-        <Text>profile</Text>
-        <Button title='Logout' onPress={() =>navigate('ThirdPage')}/>
-        <TouchableOpacity onPress={this.selectFile} style={styles.button}  >
-            <Text style={styles.buttonText}>Select File</Text>
-        </TouchableOpacity>       
-      </View>
-    </View>
+import {  
+    createSwitchNavigator,  
+    createAppContainer
     
-     
-     
-    );
-  }
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff'
-  },
-  button: {
-    width: 250,
-    height: 60,
-    backgroundColor: '#3740ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    marginBottom:12    
-  },
-  buttonText: {
-    textAlign: 'center',
-    fontSize: 15,
-    color: '#fff'
-  }
-});
+} from 'react-navigation';  
+import { createStackNavigator  } from 'react-navigation-stack';
+import {   createDrawerNavigator } from 'react-navigation-drawer';
+import FirstPage from './FirstPage.js';
+export default class App extends Component {  
+    render() {  
+        return <AppContainer />;  
+    }  
+}  
+  
+
+const DashboardStackNavigator = createStackNavigator(  
+    {  
+        FirstPage1: FirstPage
+    },  
+    {  
+        defaultNavigationOptions: ({ navigation }) => {  
+        return {  
+            headerLeft: (  
+                <Icon  
+                    style={{ paddingLeft: 10 }}  
+                    onPress={() => navigation.openDrawer()}  
+                    name="md-menu"  
+                    size={30}  
+                />  
+            )  
+        };  
+        }  
+    }  
+);  
+  
+const WelcomeStackNavigator = createStackNavigator(  
+    {  
+         SecondPage1:FirstPage
+    },  
+    {  
+        defaultNavigationOptions: ({ navigation }) => {  
+            return {  
+                headerLeft: (  
+                    <Icon  
+                        style={{ paddingLeft: 10 }}  
+                        onPress={() => navigation.openDrawer()}  
+                        name="md-menu"  
+                        size={30}  
+                    />  
+                )  
+            };  
+        }  
+    }  
+);  
+const AppDrawerNavigator = createDrawerNavigator({  
+    Dashboard: {  
+        screen: DashboardStackNavigator  
+    },  
+    Welcome: {  
+        screen: WelcomeStackNavigator  
+    },  
+});  
+  
+const AppSwitchNavigator = createSwitchNavigator({  
+    Dashboard: { screen: AppDrawerNavigator },  
+    Welcome: { screen: SecondPage1 },  
+  
+});  
+  
+const AppContainer = createAppContainer(AppDrawerNavigator);  
+  
+const styles = StyleSheet.create({  
+    container: {  
+        flex: 1,  
+        alignItems: 'center',  
+        justifyContent: 'center'  
+    }  
+});  

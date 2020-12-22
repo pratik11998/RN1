@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View,TextInput,Button} from 'react-native';
+import {StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableHighlight,
+  Image,
+  Alert} from 'react-native';
 
 export default class App extends React.Component {
   static navigationOptions = {
@@ -27,6 +34,9 @@ export default class App extends React.Component {
         navigate('FirstPage');
     
       }
+      onClickListener = (viewId) => {
+        Alert.alert("Alert", "Button pressed "+viewId);
+      }
 
 
  
@@ -34,21 +44,35 @@ export default class App extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-       <View style={styles.inputView} >
-       <TextInput  
-            style={styles.inputText}
-            placeholder="Email" 
-            placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({email:text})}/>
-            </View>
-       <View style={styles.inputView} >
-       <TextInput  
-            style={styles.inputText}
-            placeholder="Password" 
-            placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({password:text})}/>
-       </View>
-      <Button style={styles.loginBtn} title="Login" onPress={ this.Loginfu.bind(this) }/>
+        <View style={styles.inputContainer}>
+          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
+          <TextInput style={styles.inputs}
+              placeholder="Email"
+              keyboardType="email-address"
+              underlineColorAndroid='transparent'
+              onChangeText={(email) => this.setState({email})}/>
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
+          <TextInput style={styles.inputs}
+              placeholder="Password"
+              secureTextEntry={true}
+              underlineColorAndroid='transparent'
+              onChangeText={(password) => this.setState({password})}/>
+        </View>
+
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={ this.Loginfu.bind(this) }>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
+            <Text>Forgot your password?</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
+            <Text>Register</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -57,37 +81,46 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#003f5c',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#DCDCDC',
   },
-  logo:{
-    fontWeight:"bold",
-    fontSize:50,
-    color:"#fb5b5a",
-    marginBottom:40
+  inputContainer: {
+      borderBottomColor: '#F5FCFF',
+      backgroundColor: '#FFFFFF',
+      borderRadius:30,
+      borderBottomWidth: 1,
+      width:250,
+      height:45,
+      marginBottom:20,
+      flexDirection: 'row',
+      alignItems:'center'
   },
-  inputView:{
-    width:"80%",
-    backgroundColor:"#465881",
-    borderRadius:25,
-    height:50,
+  inputs:{
+      height:45,
+      marginLeft:16,
+      borderBottomColor: '#FFFFFF',
+      flex:1,
+  },
+  inputIcon:{
+    width:30,
+    height:30,
+    marginLeft:15,
+    justifyContent: 'center'
+  },
+  buttonContainer: {
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom:20,
-    justifyContent:"center",
-    padding:20
+    width:250,
+    borderRadius:30,
   },
-  inputText:{
-    height:50,
-    color:"white"
+  loginButton: {
+    backgroundColor: "#00b5ec",
   },
-  loginBtn:{
-    width:"80%",
-    backgroundColor:"#fb5b5a",
-    borderRadius:25,
-    height:50,
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:40,
-    marginBottom:10
-  },
+  loginText: {
+    color: 'white',
+  }
 });

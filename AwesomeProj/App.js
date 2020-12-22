@@ -6,7 +6,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator} from 'react-navigation-stack';
 import FirstPage from './pages/FirstPage.js';
 import SecondPage from './pages/SecondPage';
-import ThirdPage from './pages/ThirdPage'
+import ThirdPage from './pages/ThirdPage';
 
 //import all the screens we are going to switch 
 const App = createStackNavigator({
