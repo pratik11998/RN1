@@ -32,10 +32,10 @@ export default function App() {
       <Drawer.Navigator initialRouteName="Home" >
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="Profile" component={profileScreen} />
-      
-            </Drawer.Navigator>
+
+      </Drawer.Navigator>
     </NavigationContainer>
-    
-  
+
+
   );
 }
