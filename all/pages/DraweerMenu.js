@@ -11,9 +11,8 @@ const Drawer = createDrawerNavigator();
 const DraweerMenu = () => {
     return (
         <NavigationContainer>
-            <Drawer.Navigator drawerStyle={{
-                backgroundColor: 'red',
-            }} drawerContent={(props) => <CustomDrawer {...props} />}>
+            <Drawer.Navigator 
+            drawerContent={(props) => <CustomDrawer {...props} />}>
                 <Drawer.Screen name="Login" component={LoginComponent} />
                 <Drawer.Screen name="Home" component={HomeComponent} />
             </Drawer.Navigator>

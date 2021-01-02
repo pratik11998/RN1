@@ -10,6 +10,8 @@ target 'all' do
 
   pod 'react-native-fingerprint-scanner', :path => '../node_modules/react-native-fingerprint-scanner'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'allTests' do
     inherit! :complete
     # Pods for testing

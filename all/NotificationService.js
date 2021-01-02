@@ -7,12 +7,12 @@ export const LocalNotification = () => {
     bigText:
       'This is local notification demo in React Native app. Only shown, when expanded.',
     subText: 'Local Notification Demo',
-    title: 'Local Notification Title',
+    title: 'Local Notification',
     message: 'Expand me to see more',
     vibrate: true,
     vibration: 300,
     playSound: true,
     soundName: 'default',
-    actions: '["Yes", "No"]'
+    actions: '["welcome"]'
   })
 }
