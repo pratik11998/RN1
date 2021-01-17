@@ -6,10 +6,13 @@ const Paragraph = (props) => <Text style={styles.text} {...props} />
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 15,
+    fontSize: 20,
     lineHeight: 21,
     textAlign: 'center',
     marginBottom: 12,
+    color:'#FFFFFF',
+    fontStyle:'italic',
+
   },
 })
 

@@ -36,7 +36,7 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <Background>
       {/* <BackButton goBack={navigation.goBack} /> */}
-      <Logo />
+    {/* <Logo /> */}
       <Header>Create Account</Header>
       <TextInput
         label="Name"
@@ -75,9 +75,9 @@ const RegisterScreen = ({ navigation }) => {
         Sign Up
       </Button>
       <View style={styles.row}>
-        <Text>Already have an account? </Text>
+        <Text style={styles.link}>Already have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-          <Text style={styles.link}>Login</Text>
+          <Text style={styles.white}>Login</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -93,6 +93,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  white:{
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  }
 })
 
 export default RegisterScreen

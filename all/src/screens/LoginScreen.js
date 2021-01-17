@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <Background>
     
-      <Logo />
+      {/* <Logo /> */}
       <Header>Welcome back.</Header>
       <TextInput
        
@@ -69,9 +69,9 @@ const LoginScreen = ({ navigation }) => {
         Login
       </Button>
       <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
+        <Text style={styles.link}>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.white}>Sign up</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -80,9 +80,11 @@ const LoginScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   forgotPassword: {
+      fontWeight: 'bold',
     width: '100%',
     alignItems: 'flex-end',
     marginBottom: 24,
+    color: '#FFFFFF',
   },
   row: {
     flexDirection: 'row',
@@ -96,6 +98,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  white:{
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  }
 })
 
 export default LoginScreen

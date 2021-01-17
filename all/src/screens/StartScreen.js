@@ -7,8 +7,8 @@ import Paragraph from '../components/Paragraph'
 
 const StartScreen = ({ navigation }) => (
   <Background>
-    <Logo />
-    <Header>Login Template</Header>
+    {/* <Logo /> */}
+    {/* <Header>Login Template</Header> */}
     <Paragraph>
       The easiest way to start with your amazing application.
     </Paragraph>
