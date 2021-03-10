@@ -9,7 +9,9 @@ import TextInput from '../components/TextInput'
 import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
+import auth from '@react-native-firebase/auth';
 import { passwordValidator } from '../helpers/passwordValidator'
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' })
@@ -23,10 +25,27 @@ const LoginScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError })
       return
     }
+    else{
+      auth().signInWithEmailAndPassword(email.value, password.value).then(() => {
+        console.log('signed in!');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        })
+      }).catch(error => {
+       
+    
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+    
+        console.error(error);
+      });
     navigation.reset({
       index: 0,
       routes: [{ name: 'Dashboard' }],
     })
+  }
   }
 
   return (

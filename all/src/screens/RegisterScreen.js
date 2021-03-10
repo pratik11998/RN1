@@ -11,7 +11,7 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
-
+import auth from '@react-native-firebase/auth';
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
@@ -27,10 +27,29 @@ const RegisterScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError })
       return
     }
+    else
+    {
+    auth()
+  .createUserWithEmailAndPassword(email.value,password.value)
+  .then(() => {
+    console.log('User account created & signed in!');
     navigation.reset({
       index: 0,
       routes: [{ name: 'Dashboard' }],
     })
+  })
+  .catch(error => {
+    if (error.code === 'auth/email-already-in-use') {
+      console.log('That email address is already in use!');
+    }
+
+    if (error.code === 'auth/invalid-email') {
+      console.log('That email address is invalid!');
+    }
+
+    console.error(error);
+  });
+}
   }
 
   return (
